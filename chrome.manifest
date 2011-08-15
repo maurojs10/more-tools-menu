@@ -7,13 +7,16 @@ overlay chrome://messenger/content/mailWindowOverlay.xul chrome://moretools/cont
 
 locale moretools ar locale/ar/
 locale moretools ca-AD locale/ca-AD/
+locale moretools da locale/da/
 locale moretools da-DK locale/da-DK/
+locale moretools de locale/de/
 locale moretools de-DE locale/de-DE/
 locale moretools en-US locale/en-US/
 locale moretools es-AR locale/es-AR/
 locale moretools es-ES locale/es-ES/
 locale moretools fa-IR locale/fa-IR/
 locale moretools fi-FI locale/fi-FI/
+locale moretools fr locale/fr/
 locale moretools fr-FR locale/fr-FR/
 locale moretools he-IL locale/he-IL/
 locale moretools hr-HR locale/hr-HR/
@@ -23,13 +26,16 @@ locale moretools ja-JP locale/ja-JP/
 locale moretools ko-KR locale/ko-KR/
 locale moretools lt-LT locale/lt-LT/
 locale moretools nb-NO locale/nb-NO/
+locale moretools nl locale/nl/
 locale moretools nl-NL locale/nl-NL/
+locale moretools pl locale/pl/
 locale moretools pl-PL locale/pl-PL/
 locale moretools pt-BR locale/pt-BR/
 locale moretools pt-PT locale/pt-PT/
 locale moretools ro-RO locale/ro-RO/
 locale moretools ru-RU locale/ru-RU/
 locale moretools sk-SK locale/sk-SK/
+locale moretools sr locale/sr/
 locale moretools sr-RS locale/sr-RS/
 locale moretools tr-TR locale/tr-TR/
 locale moretools uk-UA locale/uk-UA/
