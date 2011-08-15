@@ -6,7 +6,7 @@
 		<em:version>1.2.2</em:version>
 		<em:description>Unclutter the "Tools" menu by moving new items to a "More Tools" menu.</em:description>
 		<em:creator>Anthony Lieuallen</em:creator>
-		<em:homepageURL>http://trac.arantius.com/wiki/Extensions/MoreToolsMenu</em:homepageURL>
+		<em:homepageURL>http://code.google.com/p/more-tools-menu/</em:homepageURL>
 		<em:iconURL>chrome://moretools/skin/em-icon.png</em:iconURL>
 
 		<!-- Firefox -->
