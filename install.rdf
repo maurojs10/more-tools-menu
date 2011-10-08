@@ -4,6 +4,7 @@
 		<em:id>{9a7a67d3-3048-47fb-acde-d0f7ae51f86a}</em:id>
 		<em:name>More Tools Menu</em:name>
 		<em:version>1.2.3</em:version>
+		<em:type>2</em:type>
 		<em:description>Unclutter the "Tools" menu by moving new items to a "More Tools" menu.</em:description>
 		<em:creator>Anthony Lieuallen</em:creator>
 		<em:homepageURL>http://code.google.com/p/more-tools-menu/</em:homepageURL>
