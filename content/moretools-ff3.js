@@ -3,6 +3,7 @@
 var toolsMenuPopup;
 var moreToolsMenuPopup;
 var origTools=getTools(document);
+var nativeToolsNotFound = false;
 
 // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
 
@@ -17,6 +18,23 @@ function getTools(node) {
     "//xul:menupopup[@id='menu_ToolsPopup' or @id='taskPopup']/*",
     doc, nsResolver, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null
   );
+
+  // Awful workaround for Thunderbird
+  if (nativeToolsNotFound) {
+    /* Since we couldn't detect the native tools on window load, let's hardcode their ids here.
+     * References:
+     *   http://mxr.mozilla.org/mozilla/source/mail/base/content/mailWindowOverlay.xul
+     *   http://mxr.mozilla.org/comm-central/source/mail/base/content/mailWindowOverlay.xul
+     * */
+    var taskPopupItems = [ 'tasksMenuMail', 'addressBook', 'devToolsSeparator', 'menu_openSavedFilesWnd', 'addonsManager', 'activityManager', 'filtersCmd', 'applyFilters', 'applyFiltersToSelection', 'tasksMenuAfterApplySeparator', 'runJunkControls', 'deleteJunk', 'tasksMenuAfterDeleteSeparator', 'menu_import', 'javaScriptConsole', 'javascriptConsole', 'prefSep', 'menu_accountmgr', 'menu_preferences', 'menu_mac_services', 'menu_mac_hide_app', 'menu_mac_hide_others', 'menu_mac_show_all' ];
+
+    for (var i = 0, l = nodesSnapshot.snapshotLength; i < l; i++)
+      for (var j = 0, k = taskPopupItems.length; j < k; j++)
+        if (nodesSnapshot.snapshotItem(i).id == taskPopupItems[j]) {
+          nodesSnapshot.snapshotItem(i).setAttribute('nativeTool', 'true');
+          break;
+        }
+  }
 
   return nodesSnapshot;
 
@@ -58,9 +76,11 @@ window.addEventListener('load', function() {
   moreToolsMenuPopup=document.getElementById('more-tools-menupopup');
 
   // Mark all tools items that were originally here.
+  nativeToolsNotFound = true;
   for (var i=0; i<origTools.snapshotLength; i++) {
     var el=origTools.snapshotItem(i);
     el.setAttribute('nativeTool', 'true');
+    if (nativeToolsNotFound) nativeToolsNotFound = false;
   }
   origTools=null;
 
