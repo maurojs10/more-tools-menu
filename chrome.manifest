@@ -18,7 +18,7 @@ locale moretools en-US locale/en-US/
 locale moretools es-AR locale/es-AR/
 locale moretools es-ES locale/es-ES/
 locale moretools fa-IR locale/fa-IR/
-locale moretools fi-FI locale/fi-FI/
+locale moretools fi    locale/fi/
 locale moretools fr    locale/fr/
 locale moretools he-IL locale/he-IL/
 locale moretools hr-HR locale/hr-HR/
