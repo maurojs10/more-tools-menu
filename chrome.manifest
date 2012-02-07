@@ -1,13 +1,16 @@
 content moretools             content/
 skin    moretools classic/1.0 skin/
 
-<!-- Firefox - Main window -->
-overlay chrome://browser/content/browser.xul             chrome://moretools/content/moretools-overlay-ff3.xul
-<!-- Thunderbird - Main window -->
-overlay chrome://messenger/content/messenger.xul         chrome://moretools/content/moretools-overlay-ff3.xul
-<!-- Thunderbird - Compose window -->
+# Firefox - Main window
+overlay chrome://browser/content/browser.xul                               chrome://moretools/content/moretools-overlay-ff3.xul
+
+# Thunderbird - Main window
+overlay chrome://messenger/content/messenger.xul                           chrome://moretools/content/moretools-overlay-ff3.xul
+
+# Thunderbird - Mail composer
 overlay chrome://messenger/content/messengercompose/messengercompose.xul   chrome://moretools/content/moretools-overlay-ff3.xul
-<!-- Thunderbird - Address book -->
+
+# Thunderbird - Address book
 overlay chrome://messenger/content/addressbook/addressbook.xul             chrome://moretools/content/moretools-overlay-ff3.xul
 
 locale moretools ar    locale/ar/
