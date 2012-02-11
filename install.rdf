@@ -3,12 +3,14 @@
 	<Description about="urn:mozilla:install-manifest">
 		<em:id>{9a7a67d3-3048-47fb-acde-d0f7ae51f86a}</em:id>
 		<em:name>More Tools Menu</em:name>
-		<em:version>1.2.5</em:version>
+		<em:version>1.3.0</em:version>
 		<em:type>2</em:type>
 		<em:description>Unclutter the "Tools" menu by moving new items to a "More Tools" menu.</em:description>
 		<em:creator>Anthony Lieuallen</em:creator>
 		<em:homepageURL>http://code.google.com/p/more-tools-menu/</em:homepageURL>
 		<em:iconURL>chrome://moretools/skin/em-icon.png</em:iconURL>
+		<em:optionsURL>chrome://moretools/content/options.xul</em:optionsURL>
+		<em:optionsType>2</em:optionsType>
 		<em:translator>ДакСРБИЈА (sr)</em:translator>
 		<em:translator>Пирятинский Виталий (ru-RU)</em:translator>
 		<em:translator>용오름 (ko-KR)</em:translator>
@@ -53,6 +55,15 @@
 				<em:id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</em:id>
 				<em:minVersion>2.0</em:minVersion>
 				<em:maxVersion>13.0a1</em:maxVersion>
+			</Description>
+		</em:targetApplication>
+
+		<!-- SeaMonkey -->
+		<em:targetApplication>
+			<Description>
+				<em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id>
+				<em:minVersion>2.0</em:minVersion>
+				<em:maxVersion>2.10a1</em:maxVersion>
 			</Description>
 		</em:targetApplication>
 	</Description>
