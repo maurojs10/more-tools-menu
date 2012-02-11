@@ -124,7 +124,7 @@ var moreTools = {
 			document.getElementById('taskPopup');          // Thunderbird, SeaMonkey
 		this.moreToolsMenuPopup = document.getElementById('more-tools-menupopup');
 
-		this.dumpToolsMenuItems();
+		// this.dumpToolsMenuItems();
 
 		this.updateItemsToKeep();
 
