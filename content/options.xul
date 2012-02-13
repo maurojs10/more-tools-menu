@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-
-<!DOCTYPE options SYSTEM "chrome://moretools/locale/options.dtd">
-
-<vbox xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
-	<setting type="bool" pref="extensions.moretools.showWhenEmpty" title="&moretools.showWhenEmpty.title;" desc="&moretools.showWhenEmpty.desc;" />
-	<setting type="string" pref="extensions.moretools.extensionToolsToKeep" title="&moretools.extensionToolsToKeep.title;" desc="&moretools.extensionToolsToKeep.desc;" />
-	<setting type="string" pref="extensions.moretools.nativeToolsToMove" title="&moretools.nativeToolsToMove.title;" desc="&moretools.nativeToolsToMove.desc;" />
-</vbox>

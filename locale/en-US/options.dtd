@@ -1,6 +1,0 @@
-<!ENTITY moretools.showWhenEmpty.title "Show when empty">
-<!ENTITY moretools.showWhenEmpty.desc "Sould More Tools menu be displayed even if it has no items?">
-<!ENTITY moretools.extensionToolsToKeep.title "Keep in Tools menu">
-<!ENTITY moretools.extensionToolsToKeep.desc "These items are created by extensions, but they must be kept in Tools menu.">
-<!ENTITY moretools.nativeToolsToMove.title "Move to More Tools menu">
-<!ENTITY moretools.nativeToolsToMove.desc "These items are provided by the application, but they must be moved to More Tools menu.">

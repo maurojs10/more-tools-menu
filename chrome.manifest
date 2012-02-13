@@ -1,23 +1,17 @@
 content moretools             content/
 skin    moretools classic/1.0 skin/
 
-# Firefox main window
-overlay chrome://browser/content/browser.xul                               chrome://moretools/content/moretools-overlay.xul
+# Firefox - Main window
+overlay chrome://browser/content/browser.xul                               chrome://moretools/content/moretools-overlay-ff3.xul
 
-# Thunderbird main window and SeaMonkey mail window
-overlay chrome://messenger/content/messenger.xul                           chrome://moretools/content/moretools-overlay.xul
+# Thunderbird - Main window
+overlay chrome://messenger/content/messenger.xul                           chrome://moretools/content/moretools-overlay-ff3.xul
 
-# SeaMonkey browser
-overlay chrome://navigator/content/navigator.xul                           chrome://moretools/content/moretools-overlay.xul
+# Thunderbird - Mail composer
+overlay chrome://messenger/content/messengercompose/messengercompose.xul   chrome://moretools/content/moretools-overlay-ff3.xul
 
-# Thunderbird and SeaMonkey mail composer
-overlay chrome://messenger/content/messengercompose/messengercompose.xul   chrome://moretools/content/moretools-overlay.xul
-
-# Thunderbird and SeaMonkey address book
-overlay chrome://messenger/content/addressbook/addressbook.xul             chrome://moretools/content/moretools-overlay.xul
-
-# SeaMonkey HTML editor
-overlay chrome://editor/content/editor.xul                                 chrome://moretools/content/moretools-overlay.xul
+# Thunderbird - Address book
+overlay chrome://messenger/content/addressbook/addressbook.xul             chrome://moretools/content/moretools-overlay-ff3.xul
 
 locale moretools ar    locale/ar/
 locale moretools ca-AD locale/ca-AD/
