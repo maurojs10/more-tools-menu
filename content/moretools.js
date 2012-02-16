@@ -1,94 +1,140 @@
-(function() {
+(function () {
+  'use strict';
 
-var toolsMenuPopup;
-var moreToolsMenuPopup;
-var origTools=getTools(document);
-var nativeToolsNotFound = false;
+  var toolsMenuPopup,
+    moreToolsMenuPopup,
+    origTools,
+    prefs = {
+      showWhenEmpty: false,
+      toolsToKeep: '',
+      nativeToolsToMove: ''
+    },
+    itemsToKeep,
+    nativeTools = 'activityManager|addonsManager|addonsmgr|addressBook|'
+      + 'applyFilters|applyFiltersToSelection|browserToolsSeparator|'
+      + 'cmd_switchprofile|deleteJunk|devToolsSeparator|downloadmgr|filtersCmd|'
+      + 'javascriptConsole|menu_accountmgr|menu_cookieManager|menu_Filters|'
+      + 'menu_imageManager|menu_import|menu_openAddons|menu_openDownloads|'
+      + 'menu_openSavedFilesWnd|menu_pageInfo|menu_passwordManager|'
+      + 'menu_popupManager|menu_preferences|menu_search|menu_search_addresses|'
+      + 'menu_SearchAddresses|menu_SearchMail|menu_searchWeb|menu_translate|'
+      + 'menu_validate|navBeginGlobalItems|prefSep|privateBrowsingItem|'
+      + 'runJunkControls|sanitizeItem|sanitizeSeparator|sep_switchprofile|'
+      + 'sep_validate|sync-setup|sync-syncnowitem|tasksDataman|'
+      + 'tasksMenuAddressBook|tasksMenuAfterAddressesSeparator|'
+      + 'tasksMenuAfterApplySeparator|tasksMenuAfterDeleteSeparator|'
+      + 'tasksMenuMail|webDeveloperMenu';
 
-// \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
+  function loadPrefs() {
+    var prefBranch;
 
-function getTools(node) {
-  function nsResolver() {
-    return 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
+    prefBranch = Components.classes['@mozilla.org/preferences-service;1']
+      .getService(Components.interfaces.nsIPrefService)
+      .getBranch('extensions.moretools.');
+    prefs.showWhenEmpty = prefBranch.getBoolPref('showWhenEmpty');
+    prefs.nativeToolsToMove = prefBranch.getCharPref('nativeToolsToMove');
+    prefs.toolsToKeep = prefBranch.getCharPref('toolsToKeep');
   }
 
-  var doc=node.ownerDocument || node;
+  function updateItemsToKeep() {
+    var pattern;
 
-  var nodesSnapshot=doc.evaluate(
-    "//xul:menupopup[@id='menu_ToolsPopup' or @id='taskPopup']/*",
-    doc, nsResolver, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null
-  );
+    // Keep in Tools menu the native items.
+    pattern = nativeTools;
 
-  // Awful workaround for Thunderbird
-  if (nativeToolsNotFound) {
-    /* Since we couldn't detect the native tools on window load, let's hardcode their ids here.
-     * References:
-     *   http://mxr.mozilla.org/mozilla/source/mail/base/content/mailWindowOverlay.xul
-     *   http://mxr.mozilla.org/comm-central/source/mail/base/content/mailWindowOverlay.xul
-     * */
-    var taskPopupItems = [ 'tasksMenuMail', 'addressBook', 'devToolsSeparator', 'menu_openSavedFilesWnd', 'addonsManager', 'activityManager', 'filtersCmd', 'applyFilters', 'applyFiltersToSelection', 'tasksMenuAfterApplySeparator', 'runJunkControls', 'deleteJunk', 'tasksMenuAfterDeleteSeparator', 'menu_import', 'javaScriptConsole', 'javascriptConsole', 'prefSep', 'menu_accountmgr', 'menu_preferences', 'menu_mac_services', 'menu_mac_hide_app', 'menu_mac_hide_others', 'menu_mac_show_all' ];
+    // Move to More Tools the native items selected by the user.
+    if (prefs.nativeToolsToMove) {
+      pattern = pattern.replace(new RegExp('\\b\\|?' +
+        prefs.nativeToolsToMove.replace('|', '\\|?\\b|\\b\\|?') +
+        '\\|?\\b', 'g'), '');
+    }
 
-    for (var i = 0, l = nodesSnapshot.snapshotLength; i < l; i++)
-      for (var j = 0, k = taskPopupItems.length; j < k; j++)
-        if (nodesSnapshot.snapshotItem(i).id == taskPopupItems[j]) {
-          nodesSnapshot.snapshotItem(i).setAttribute('nativeTool', 'true');
-          break;
+    // Keep in Tools menu the extension items selected by the user.
+    if (prefs.toolsToKeep) {
+      pattern += '|' + prefs.toolsToKeep;
+    }
+
+    // Keep in Tools menu the items that doesn't have an id.
+    pattern += '|';
+
+    itemsToKeep = new RegExp('^(' + pattern + ')$');
+  }
+
+  function getTools(node) {
+    function nsResolver() {
+      return 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
+    }
+
+    var doc = node.ownerDocument || node;
+    return doc.evaluate(
+      '//xul:menupopup[@id="menu_ToolsPopup" or @id="taskPopup"]/*',
+      doc,
+      nsResolver,
+      XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
+      null
+    );
+  }
+
+  function moveTools() {
+    var i, l, el, currTools, moreToolsMenuIsEmpty;
+
+    currTools = getTools(document);
+    for (i = 0, l = currTools.snapshotLength; i < l; i += 1) {
+      el = currTools.snapshotItem(i);
+      if (!itemsToKeep.test(el.id)) {
+        if (el.tagName === 'menuseparator') {
+          toolsMenuPopup.removeChild(el);
+        } else {
+          moreToolsMenuPopup.appendChild(el);
         }
-  }
-
-  return nodesSnapshot;
-
-  var result=[];
-  for (var i=0; i<nodesSnapshot.snapshotLength; i++) {
-    result.push( nodesSnapshot.snapshotItem(i) );
-  }
-
-  return result;
-}
-
-function moveAllTools() {
-  var mungeFlag=false;
-  var currTools=getTools(document);
-  for (var i=0; i<currTools.snapshotLength; i++) {
-    var el=currTools.snapshotItem(i);
-    if (!el.hasAttribute('nativeTool')) {
-      if ('menuseparator'==el.tagName) {
-        toolsMenuPopup.removeChild(el);
-      } else {
-        moreToolsMenuPopup.appendChild(el);
       }
-      mungeFlag=true;
+    }
+
+    moreToolsMenuIsEmpty = (moreToolsMenuPopup.childNodes.length === 2);
+
+    if (moreToolsMenuIsEmpty) {
+      document.getElementById('more-tools-label').setAttribute('hidden', false);
+      document.getElementById('more-tools-sep').setAttribute('hidden', false);
+    } else {
+      document.getElementById('more-tools-label').setAttribute('hidden', true);
+      document.getElementById('more-tools-sep').setAttribute('hidden', true);
+    }
+
+    if (moreToolsMenuIsEmpty && !prefs.showWhenEmpty) {
+      document.getElementById('more-tools-menu').setAttribute('hidden', true);
+    } else {
+      document.getElementById('more-tools-menu').setAttribute('hidden', false);
     }
   }
-  if (mungeFlag) {
-    document.getElementById('more-tools-label').setAttribute('hidden', true);
-    document.getElementById('more-tools-sep').setAttribute('hidden', true);
-  }
-}
 
-// \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ // \\ //
+  origTools = getTools(document);
+  window.addEventListener('load', function () {
+    var i, l, el;
 
-window.addEventListener('load', function() {
-  // Look up nodes now that getElementById() is safe.
-  toolsMenuPopup=
-    document.getElementById('menu_ToolsPopup') || // firefox
-    document.getElementById('taskPopup');         // thunderbird
-  moreToolsMenuPopup=document.getElementById('more-tools-menupopup');
+    // Look up nodes now that getElementById() is safe.
+    toolsMenuPopup =
+      document.getElementById('menu_ToolsPopup') || // Firefox
+      document.getElementById('taskPopup');         // Thunderbird, SeaMonkey
+    moreToolsMenuPopup = document.getElementById('more-tools-menupopup');
 
-  // Mark all tools items that were originally here.
-  nativeToolsNotFound = true;
-  for (var i=0; i<origTools.snapshotLength; i++) {
-    var el=origTools.snapshotItem(i);
-    el.setAttribute('nativeTool', 'true');
-    if (nativeToolsNotFound) nativeToolsNotFound = false;
-  }
-  origTools=null;
+    // Load user-configured options.
+    loadPrefs();
 
-  // Move any non-marked tools that are already present.
-  moveAllTools();
+    // Mark all tools items that were originally here.
+    for (i = 0, l = origTools.snapshotLength; i < l; i += 1) {
+      el = origTools.snapshotItem(i);
+      nativeTools += '|' + el.id;
+    }
+    origTools = null;
 
-  // Move any non-marked tool that are added later.
-  toolsMenuPopup.addEventListener('DOMNodeInserted', moveAllTools, true);
-}, true);
+    // Update the list of items to be kept in Tools menu.
+    updateItemsToKeep();
 
-})();
+    // Move any non-marked tools that are already present.
+    moveTools();
+
+    // Move any non-marked tool that are added later.
+    toolsMenuPopup.addEventListener('DOMNodeInserted', moveTools, true);
+  }, true);
+
+}());
