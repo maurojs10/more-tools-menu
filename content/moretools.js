@@ -3,7 +3,6 @@
 
   var toolsMenuPopup,
     moreToolsMenuPopup,
-    origTools,
     prefs = {
       showWhenEmpty: false,
       toolsToKeep: '',
@@ -107,7 +106,6 @@
     }
   }
 
-  origTools = getTools(document);
   window.addEventListener('load', function () {
     var i, l, el;
 
@@ -120,20 +118,13 @@
     // Load user-configured options.
     loadPrefs();
 
-    // Mark all tools items that were originally here.
-    for (i = 0, l = origTools.snapshotLength; i < l; i += 1) {
-      el = origTools.snapshotItem(i);
-      nativeTools += '|' + el.id;
-    }
-    origTools = null;
-
     // Update the list of items to be kept in Tools menu.
     updateItemsToKeep();
 
-    // Move any non-marked tools that are already present.
+    // Move any tools not in the list of items to keep.
     moveTools();
 
-    // Move any non-marked tool that are added later.
+    // Move tools that are added later.
     toolsMenuPopup.addEventListener('DOMNodeInserted', moveTools, true);
   }, true);
 

@@ -4,23 +4,23 @@
 
 <vbox xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <setting
-    type="bool"
     pref="extensions.moretools.showWhenEmpty"
     title="&moretools.showWhenEmpty.title;"
     desc="&moretools.showWhenEmpty.desc;"
+    type="bool"
   />
 
   <setting
-    type="string"
     pref="extensions.moretools.toolsToKeep"
     title="&moretools.toolsToKeep.title;"
     desc="&moretools.toolsToKeep.desc;"
+    type="string"
   />
 
   <setting
-    type="string"
     pref="extensions.moretools.nativeToolsToMove"
     title="&moretools.nativeToolsToMove.title;"
     desc="&moretools.nativeToolsToMove.desc;"
+    type="string"
   />
 </vbox>

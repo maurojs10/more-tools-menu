@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!DOCTYPE options SYSTEM "chrome://moretools/locale/options.dtd">
+
+<prefwindow
+  id="optionsWindow"
+  title="&moretools.optionsWindow.title;"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+>
+  <prefpane>
+    <preferences>
+      <preference
+        id="prefShowWhenEmpty"
+        name="extensions.moretools.showWhenEmpty"
+        type="bool"
+      />
+
+      <preference
+        id="prefToolsToKeep"
+        name="extensions.moretools.toolsToKeep"
+        type="string"
+      />
+
+      <preference
+        id="prefNativeToolsToMove"
+        name="extensions.moretools.nativeToolsToMove"
+        type="string"
+      />
+    </preferences>
+
+    <hbox align="center">
+      <checkbox
+        preference="prefShowWhenEmpty"
+        id="showWhenEmpty"
+        label="&moretools.showWhenEmpty.title;"
+        tooltiptext="&moretools.showWhenEmpty.desc;"
+      />
+    </hbox>
+
+    <hbox align="center">
+      <label
+        control="toolsToKeep"
+        value="&moretools.toolsToKeep.title;"
+        tooltiptext="&moretools.toolsToKeep.desc;"
+      />
+      <textbox
+        preference="prefToolsToKeep"
+        id="toolsToKeep"
+        tooltiptext="&moretools.toolsToKeep.desc;"
+      />
+    </hbox>
+
+    <hbox align="center">
+      <label
+        control="nativeToolsToMove"
+        value="&moretools.nativeToolsToMove.title;"
+        tooltiptext="&moretools.nativeToolsToMove.desc;"
+      />
+      <textbox
+        preference="prefNativeToolsToMove"
+        id="nativeToolsToMove"
+        tooltiptext="&moretools.nativeToolsToMove.desc;"
+      />
+    </hbox>
+  </prefpane>
+</prefwindow>
