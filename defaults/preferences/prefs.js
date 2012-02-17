@@ -4,5 +4,5 @@ pref(
 );
 
 pref('extensions.moretools.showWhenEmpty', false);
-pref('extensions.moretools.nativeToolsToMove', '');
+pref('extensions.moretools.toolsToMove', '');
 pref('extensions.moretools.toolsToKeep', 'menuAltPlugins, menu_options');

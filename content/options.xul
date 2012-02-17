@@ -18,9 +18,9 @@
   />
 
   <setting
-    pref="extensions.moretools.nativeToolsToMove"
-    title="&moretools.nativeToolsToMove.title;"
-    desc="&moretools.nativeToolsToMove.desc;"
+    pref="extensions.moretools.toolsToMove"
+    title="&moretools.toolsToMove.title;"
+    desc="&moretools.toolsToMove.desc;"
     type="string"
   />
 </vbox>

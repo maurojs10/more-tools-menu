@@ -23,8 +23,8 @@
       />
 
       <preference
-        id="prefNativeToolsToMove"
-        name="extensions.moretools.nativeToolsToMove"
+        id="prefToolsToMove"
+        name="extensions.moretools.toolsToMove"
         type="string"
       />
     </preferences>
@@ -53,14 +53,14 @@
 
     <hbox align="center">
       <label
-        control="nativeToolsToMove"
-        value="&moretools.nativeToolsToMove.title;"
-        tooltiptext="&moretools.nativeToolsToMove.desc;"
+        control="toolsToMove"
+        value="&moretools.toolsToMove.title;"
+        tooltiptext="&moretools.toolsToMove.desc;"
       />
       <textbox
-        preference="prefNativeToolsToMove"
-        id="nativeToolsToMove"
-        tooltiptext="&moretools.nativeToolsToMove.desc;"
+        preference="prefToolsToMove"
+        id="toolsToMove"
+        tooltiptext="&moretools.toolsToMove.desc;"
       />
     </hbox>
   </prefpane>

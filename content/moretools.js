@@ -6,7 +6,7 @@
     prefs = {
       showWhenEmpty: false,
       toolsToKeep: '',
-      nativeToolsToMove: ''
+      toolsToMove: ''
     },
     itemsToKeep,
     nativeTools = 'activityManager|addonsManager|addonsmgr|addressBook|'
@@ -24,49 +24,50 @@
       + 'tasksMenuAfterAddressesSeparator|tasksMenuAfterApplySeparator|'
       + 'tasksMenuAfterDeleteSeparator|tasksMenuMail|webDeveloperMenu';
 
-  function loadPrefs() {
-    var prefBranch;
-
-    prefBranch = Components.classes['@mozilla.org/preferences-service;1']
-      .getService(Components.interfaces.nsIPrefService)
-      .getBranch('extensions.moretools.');
-    prefs.showWhenEmpty = prefBranch.getBoolPref('showWhenEmpty');
-    prefs.nativeToolsToMove = prefBranch.getCharPref('nativeToolsToMove');
-    prefs.toolsToKeep = prefBranch.getCharPref('toolsToKeep');
-  }
+  String.prototype.trimPipes = function () {
+    return this.replace(/\|{2,}/g, '|').replace(/^\||\|$/g, '');
+  };
 
   function updateItemsToKeep() {
     var pattern;
 
-    // Keep in Tools menu the native items.
+    // Keep the native items.
     pattern = nativeTools;
 
-    // Move to More Tools the native items selected by the user.
-    if (prefs.nativeToolsToMove) {
-      pattern = pattern.replace(new RegExp('\\b\\|?' +
-        prefs.nativeToolsToMove.replace(/\s*[,|]\s*/g, '\\|?\\b|\\b\\|?') +
-        '\\|?\\b', 'g'), '');
+    // Move the native items selected by the user.
+    if (prefs.toolsToMove) {
+      pattern = pattern.replace(new RegExp(
+        '\\b' + prefs.toolsToMove.replace(/\|/g, '\\b|\\b') + '\\b',
+        'g'
+      ), '').trimPipes();
     }
 
-    // Keep in Tools menu the extension items selected by the user.
+    // Keep the extension items selected by the user.
     if (prefs.toolsToKeep) {
-      pattern += '|' + prefs.toolsToKeep.replace(/\s*[,|]\s*/g, '|');
+      pattern += '|' + prefs.toolsToKeep;
     }
 
-    // Keep in Tools menu the items that doesn't have an id.
+    // Keep the items that doesn't have an id.
     pattern += '|';
 
     itemsToKeep = new RegExp('^(' + pattern + ')$');
   }
 
-  function getTools(node) {
+  function getMenu(node, type) {
+    var  doc, xpath;
+
     function nsResolver() {
       return 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
     }
 
-    var doc = node.ownerDocument || node;
+    doc = node.ownerDocument || node;
+    if (type === 'tools') {
+      xpath = '//xul:menupopup[@id="menu_ToolsPopup" or @id="taskPopup"]/*';
+    } else if (type === 'moreTools') {
+      xpath = '//xul:menupopup[@id="more-tools-menupopup"]/*';
+    }
     return doc.evaluate(
-      '//xul:menupopup[@id="menu_ToolsPopup" or @id="taskPopup"]/*',
+      xpath,
       doc,
       nsResolver,
       XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
@@ -74,20 +75,8 @@
     );
   }
 
-  function moveTools() {
-    var i, l, el, currTools, moreToolsMenuIsEmpty;
-
-    currTools = getTools(document);
-    for (i = 0, l = currTools.snapshotLength; i < l; i += 1) {
-      el = currTools.snapshotItem(i);
-      if (!itemsToKeep.test(el.id)) {
-        if (el.tagName === 'menuseparator') {
-          toolsMenuPopup.removeChild(el);
-        } else {
-          moreToolsMenuPopup.appendChild(el);
-        }
-      }
-    }
+  function toggleMoreTools() {
+    var moreToolsMenuIsEmpty;
 
     moreToolsMenuIsEmpty = (moreToolsMenuPopup.childNodes.length === 2);
 
@@ -106,18 +95,91 @@
     }
   }
 
+  function moveTools() {
+    var i, l, el, menu;
+
+    // Move items to More Tools menu.
+    menu = getMenu(document, 'tools');
+    for (i = 0, l = menu.snapshotLength; i < l; i += 1) {
+      el = menu.snapshotItem(i);
+      if (!itemsToKeep.test(el.id)) {
+        if (el.tagName === 'menuseparator') {
+          toolsMenuPopup.removeChild(el);
+        } else {
+          moreToolsMenuPopup.appendChild(el);
+        }
+      }
+    }
+
+    // Move items back to Tools menu.
+    menu = getMenu(document, 'moreTools');
+    for (i = 0, l = menu.snapshotLength; i < l; i += 1) {
+      el = menu.snapshotItem(i);
+      if (itemsToKeep.test(el.id)) {
+        if (el.tagName === 'menuseparator') {
+          moreToolsMenuPopup.removeChild(el);
+        } else {
+          toolsMenuPopup.appendChild(el);
+        }
+      }
+    }
+
+    toggleMoreTools();
+  }
+
   function dumpTools() {
-    var i, l, el, currTools, message;
+    var i, l, el, menu, message;
 
     message = 'Items found in Tools menu at startup:\n';
-    currTools = getTools(document);
-    for (i = 0, l = currTools.snapshotLength; i < l; i += 1) {
-      message += '\t' + currTools.snapshotItem(i).id
-        + '\t' + currTools.snapshotItem(i).label + '\n';
+    menu = getMenu(document, 'tools');
+    for (i = 0, l = menu.snapshotLength; i < l; i += 1) {
+      message += '\t' + menu.snapshotItem(i).id
+        + '\t' + menu.snapshotItem(i).label + '\n';
     }
     Components.classes['@mozilla.org/consoleservice;1']
       .getService(Components.interfaces.nsIConsoleService)
       .logStringMessage(message);
+  }
+
+  function makePattern(s) {
+    return s.replace(/(\-)/g, '\\$1').replace(/\s*[,|]\s*/g, '|').trimPipes();
+  }
+
+  function loadPrefs() {
+    var prefBranch;
+
+    prefBranch = Components.classes['@mozilla.org/preferences-service;1']
+      .getService(Components.interfaces.nsIPrefService)
+      .getBranch('extensions.moretools.');
+    prefs.showWhenEmpty = prefBranch.getBoolPref('showWhenEmpty');
+    prefs.toolsToMove = makePattern(prefBranch.getCharPref('toolsToMove'));
+    prefs.toolsToKeep = makePattern(prefBranch.getCharPref('toolsToKeep'));
+  }
+
+  function observePrefs() {
+    var prefBranch;
+
+    prefBranch = Components.classes['@mozilla.org/preferences-service;1']
+      .getService(Components.interfaces.nsIPrefBranch);
+    prefBranch.QueryInterface(Components.interfaces.nsIPrefBranch2);
+    prefBranch.addObserver('extensions.moretools.', {
+      observe: function (aSubject, aTopic, aData) {
+        if (aTopic === 'nsPref:changed') {
+          loadPrefs();
+          switch (aData) {
+          case 'extensions.moretools.showWhenEmpty':
+            toggleMoreTools();
+            break;
+          case 'extensions.moretools.toolsToMove':
+          case 'extensions.moretools.toolsToKeep':
+            updateItemsToKeep();
+            moveTools();
+            break;
+          }
+        }
+      }
+    }, false);
+    prefBranch.QueryInterface(Components.interfaces.nsIPrefBranch);
   }
 
   window.addEventListener('load', function () {
@@ -132,8 +194,9 @@
       document.getElementById('taskPopup');         // Thunderbird, SeaMonkey
     moreToolsMenuPopup = document.getElementById('more-tools-menupopup');
 
-    // Load user-configured options.
+    // Load user-configured options and monitor changes made to them.
     loadPrefs();
+    observePrefs();
 
     // Update the list of items to be kept in Tools menu.
     updateItemsToKeep();
@@ -144,5 +207,4 @@
     // Move tools that are added later.
     toolsMenuPopup.addEventListener('DOMNodeInserted', moveTools, true);
   }, true);
-
 }());
