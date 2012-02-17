@@ -12,17 +12,17 @@
     nativeTools = 'activityManager|addonsManager|addonsmgr|addressBook|'
       + 'applyFilters|applyFiltersToSelection|browserToolsSeparator|'
       + 'cmd_switchprofile|deleteJunk|devToolsSeparator|downloadmgr|filtersCmd|'
-      + 'javascriptConsole|menu_accountmgr|menu_cookieManager|menu_Filters|'
-      + 'menu_imageManager|menu_import|menu_openAddons|menu_openDownloads|'
-      + 'menu_openSavedFilesWnd|menu_pageInfo|menu_passwordManager|'
-      + 'menu_popupManager|menu_preferences|menu_search|menu_search_addresses|'
-      + 'menu_SearchAddresses|menu_SearchMail|menu_searchWeb|menu_translate|'
-      + 'menu_validate|navBeginGlobalItems|prefSep|privateBrowsingItem|'
-      + 'runJunkControls|sanitizeItem|sanitizeSeparator|sep_switchprofile|'
-      + 'sep_validate|sync-setup|sync-syncnowitem|tasksDataman|'
-      + 'tasksMenuAddressBook|tasksMenuAfterAddressesSeparator|'
-      + 'tasksMenuAfterApplySeparator|tasksMenuAfterDeleteSeparator|'
-      + 'tasksMenuMail|webDeveloperMenu';
+      + 'image|javascriptConsole|menu_accountmgr|menu_cookieManager|'
+      + 'menu_Filters|menu_imageManager|menu_import|menu_openAddons|'
+      + 'menu_openDownloads|menu_openSavedFilesWnd|menu_pageInfo|'
+      + 'menu_passwordManager|menu_popupManager|menu_preferences|menu_search|'
+      + 'menu_search_addresses|menu_SearchAddresses|menu_SearchMail|'
+      + 'menu_searchWeb|menu_translate|menu_validate|navBeginGlobalItems|popup|'
+      + 'prefSep|privateBrowsingItem|runJunkControls|sanitizeItem|'
+      + 'sanitizeSeparator|sep_switchprofile|sep_validate|sync-setup|'
+      + 'sync-syncnowitem|tasksDataman|tasksMenuAddressBook|'
+      + 'tasksMenuAfterAddressesSeparator|tasksMenuAfterApplySeparator|'
+      + 'tasksMenuAfterDeleteSeparator|tasksMenuMail|webDeveloperMenu';
 
   function loadPrefs() {
     var prefBranch;
@@ -44,13 +44,13 @@
     // Move to More Tools the native items selected by the user.
     if (prefs.nativeToolsToMove) {
       pattern = pattern.replace(new RegExp('\\b\\|?' +
-        prefs.nativeToolsToMove.replace('|', '\\|?\\b|\\b\\|?') +
+        prefs.nativeToolsToMove.replace(/\s*[,|]\s*/g, '\\|?\\b|\\b\\|?') +
         '\\|?\\b', 'g'), '');
     }
 
     // Keep in Tools menu the extension items selected by the user.
     if (prefs.toolsToKeep) {
-      pattern += '|' + prefs.toolsToKeep;
+      pattern += '|' + prefs.toolsToKeep.replace(/\s*[,|]\s*/g, '|');
     }
 
     // Keep in Tools menu the items that doesn't have an id.
@@ -106,8 +106,25 @@
     }
   }
 
+  function dumpTools() {
+    var i, l, el, currTools, message;
+
+    message = 'Items found in Tools menu at startup:\n';
+    currTools = getTools(document);
+    for (i = 0, l = currTools.snapshotLength; i < l; i += 1) {
+      message += '\t' + currTools.snapshotItem(i).id
+        + '\t' + currTools.snapshotItem(i).label + '\n';
+    }
+    Components.classes['@mozilla.org/consoleservice;1']
+      .getService(Components.interfaces.nsIConsoleService)
+      .logStringMessage(message);
+  }
+
   window.addEventListener('load', function () {
     var i, l, el;
+
+    // This line must be commented out to make the extension work properly.
+    // return dumpTools();
 
     // Look up nodes now that getElementById() is safe.
     toolsMenuPopup =
