@@ -95,34 +95,61 @@
     }
   }
 
+  function toggleSeparators(menu) {
+    var a, b, item, prevItem, nextItem;
+
+    for (a = 0, b = menu.snapshotLength - 1; a <= b; a += 1) {
+      item = menu.snapshotItem(a);
+      if (item.tagName === 'menuseparator' && item.id) {
+        prevItem = item.previousSibling;
+        nextItem = item.nextSibling;
+        if (prevItem && prevItem.tagName !== 'menuseparator' &&
+            nextItem && nextItem.tagName !== 'menuseparator') {
+          document.getElementById(item.id).setAttribute('hidden', false);
+        } else {
+          document.getElementById(item.id).setAttribute('hidden', true);
+        }
+      }
+    }
+  }
+
   function moveTools() {
-    var i, l, el, menu;
+    var a, b, menu, item, nextItem;
 
     // Move items to More Tools menu.
     menu = getMenu(document, 'tools');
-    for (i = 0, l = menu.snapshotLength; i < l; i += 1) {
-      el = menu.snapshotItem(i);
-      if (!itemsToKeep.test(el.id)) {
-        if (el.tagName === 'menuseparator') {
-          toolsMenuPopup.removeChild(el);
-        } else {
-          moreToolsMenuPopup.appendChild(el);
+    for (a = 0, b = menu.snapshotLength - 1; a <= b; a += 1) {
+      item = menu.snapshotItem(a);
+      if (!itemsToKeep.test(item.id)) {
+        nextItem = item.nextSibling;
+        if (nextItem) {
+          item.setAttribute('nextItemID', nextItem.id);
         }
+        moreToolsMenuPopup.appendChild(item);
       }
     }
 
     // Move items back to Tools menu.
     menu = getMenu(document, 'moreTools');
-    for (i = 0, l = menu.snapshotLength; i < l; i += 1) {
-      el = menu.snapshotItem(i);
-      if (itemsToKeep.test(el.id)) {
-        if (el.tagName === 'menuseparator') {
-          moreToolsMenuPopup.removeChild(el);
+    for (a = menu.snapshotLength - 1, b = 0; a >= b; a -= 1) {
+      item = menu.snapshotItem(a);
+      if (itemsToKeep.test(item.id)) {
+        if (item.hasAttribute('nextItemID')) {
+          nextItem = document.getElementById(item.getAttribute('nextItemID'));
         } else {
-          toolsMenuPopup.appendChild(el);
+          nextItem = null;
+        }
+        if (nextItem) {
+          toolsMenuPopup.insertBefore(item, nextItem);
+        } else {
+          toolsMenuPopup.appendChild(item);
         }
       }
     }
+
+    // Toggle visibility of the separators.
+    toggleSeparators(getMenu(document, 'tools'));
+    toggleSeparators(getMenu(document, 'moreTools'));
 
     toggleMoreTools();
   }
