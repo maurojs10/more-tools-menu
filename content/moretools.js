@@ -157,14 +157,11 @@
         }
       }
     }
-
-    // Sort items in More Tools menu.
-    sortMoreTools();
-
-    // Toggle visibility of the separators.
     toggleSeparators(getMenu(document, 'tools'));
-    toggleSeparators(getMenu(document, 'moreTools'));
 
+    // Finish More Tools menu.
+    sortMoreTools();
+    toggleSeparators(getMenu(document, 'moreTools'));
     toggleMoreTools();
   }
 
@@ -216,6 +213,7 @@
             break;
           case 'extensions.moretools.sortItems':
             sortMoreTools();
+            toggleSeparators(getMenu(document, 'moreTools'));
             break;
           case 'extensions.moretools.toolsToMove':
           case 'extensions.moretools.toolsToKeep':
