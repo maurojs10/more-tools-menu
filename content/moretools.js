@@ -5,6 +5,7 @@
     moreToolsMenuPopup,
     prefs = {
       showWhenEmpty: false,
+      sortItems: false,
       toolsToKeep: '',
       toolsToMove: ''
     },
@@ -95,6 +96,16 @@
     }
   }
 
+  function sortMoreTools() {
+    var sortService;
+
+    if (prefs.sortItems) {
+      sortService = Components.classes['@mozilla.org/xul/xul-sort-service;1']
+        .getService(Components.interfaces.nsIXULSortService);
+      sortService.sort(moreToolsMenuPopup, 'label', 'ascending');
+    }
+  }
+
   function toggleSeparators(menu) {
     var a, b, item, prevItem, nextItem;
 
@@ -147,6 +158,9 @@
       }
     }
 
+    // Sort items in More Tools menu.
+    sortMoreTools();
+
     // Toggle visibility of the separators.
     toggleSeparators(getMenu(document, 'tools'));
     toggleSeparators(getMenu(document, 'moreTools'));
@@ -179,6 +193,7 @@
       .getService(Components.interfaces.nsIPrefService)
       .getBranch('extensions.moretools.');
     prefs.showWhenEmpty = prefBranch.getBoolPref('showWhenEmpty');
+    prefs.sortItems = prefBranch.getBoolPref('sortItems');
     prefs.toolsToMove = makePattern(prefBranch.getCharPref('toolsToMove'));
     prefs.toolsToKeep = makePattern(prefBranch.getCharPref('toolsToKeep'));
   }
@@ -196,6 +211,9 @@
           switch (aData) {
           case 'extensions.moretools.showWhenEmpty':
             toggleMoreTools();
+            break;
+          case 'extensions.moretools.sortItems':
+            sortMoreTools();
             break;
           case 'extensions.moretools.toolsToMove':
           case 'extensions.moretools.toolsToKeep':

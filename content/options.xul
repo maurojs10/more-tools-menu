@@ -11,6 +11,13 @@
   />
 
   <setting
+    pref="extensions.moretools.sortItems"
+    title="&moretools.sortItems.title;"
+    desc="&moretools.sortItems.desc;"
+    type="bool"
+  />
+
+  <setting
     pref="extensions.moretools.toolsToKeep"
     title="&moretools.toolsToKeep.title;"
     desc="&moretools.toolsToKeep.desc;"

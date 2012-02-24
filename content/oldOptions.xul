@@ -17,6 +17,12 @@
       />
 
       <preference
+        id="prefSortItems"
+        name="extensions.moretools.sortItems"
+        type="bool"
+      />
+
+      <preference
         id="prefToolsToKeep"
         name="extensions.moretools.toolsToKeep"
         type="string"
@@ -35,6 +41,15 @@
         id="showWhenEmpty"
         label="&moretools.showWhenEmpty.title;"
         tooltiptext="&moretools.showWhenEmpty.desc;"
+      />
+    </hbox>
+
+    <hbox align="center">
+      <checkbox
+        preference="prefSortItems"
+        id="sortItems"
+        label="&moretools.sortItems.title;"
+        tooltiptext="&moretools.sortItems.desc;"
       />
     </hbox>
 
