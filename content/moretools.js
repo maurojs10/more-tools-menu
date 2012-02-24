@@ -169,17 +169,19 @@
   }
 
   function dumpTools() {
-    var i, l, el, menu, message;
+    var i, l, el, menu, message1, message2;
 
-    message = 'Items found in Tools menu at startup:\n';
+    message1 = 'Items found in Tools menu at startup:\n';
+    message2 = '\n\ntoolsToMove: ';
     menu = getMenu(document, 'tools');
     for (i = 0, l = menu.snapshotLength; i < l; i += 1) {
-      message += '\t' + menu.snapshotItem(i).id
+      message1 += '\t' + menu.snapshotItem(i).id
         + '\t' + menu.snapshotItem(i).label + '\n';
+      message2 += menu.snapshotItem(i).id + ', ';
     }
     Components.classes['@mozilla.org/consoleservice;1']
       .getService(Components.interfaces.nsIConsoleService)
-      .logStringMessage(message);
+      .logStringMessage(message1 + message2);
   }
 
   function makePattern(s) {
