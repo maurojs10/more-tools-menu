@@ -99,10 +99,12 @@
   function sortMoreTools() {
     var sortService;
 
+    sortService = Components.classes['@mozilla.org/xul/xul-sort-service;1']
+      .getService(Components.interfaces.nsIXULSortService);
     if (prefs.sortItems) {
-      sortService = Components.classes['@mozilla.org/xul/xul-sort-service;1']
-        .getService(Components.interfaces.nsIXULSortService);
       sortService.sort(moreToolsMenuPopup, 'label', 'ascending');
+    } else {
+      sortService.sort(moreToolsMenuPopup, 'defaultOrder', 'integer');
     }
   }
 
@@ -131,6 +133,9 @@
     menu = getMenu(document, 'tools');
     for (a = 0, b = menu.snapshotLength - 1; a <= b; a += 1) {
       item = menu.snapshotItem(a);
+      if (!item.hasAttribute('defaultOrder')) {
+        item.setAttribute('defaultOrder', a);
+      }
       if (!itemsToKeep.test(item.id)) {
         nextItem = item.nextSibling;
         if (nextItem) {
