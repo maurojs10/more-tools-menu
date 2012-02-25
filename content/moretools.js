@@ -219,6 +219,7 @@
           case 'extensions.moretools.sortItems':
             sortMoreTools();
             toggleSeparators(getMenu(document, 'moreTools'));
+            toggleMoreTools();
             break;
           case 'extensions.moretools.toolsToMove':
           case 'extensions.moretools.toolsToKeep':
