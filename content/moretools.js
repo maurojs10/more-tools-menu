@@ -29,6 +29,10 @@
     return this.replace(/\|{2,}/g, '|').replace(/^\||\|$/g, '');
   };
 
+  function isMoreToolsEmpty() {
+    return (moreToolsMenuPopup.childNodes.length === 2);
+  }
+
   function updateItemsToKeep() {
     var pattern;
 
@@ -77,11 +81,7 @@
   }
 
   function toggleMoreTools() {
-    var moreToolsMenuIsEmpty;
-
-    moreToolsMenuIsEmpty = (moreToolsMenuPopup.childNodes.length === 2);
-
-    if (moreToolsMenuIsEmpty) {
+    if (isMoreToolsEmpty()) {
       document.getElementById('more-tools-label').setAttribute('hidden', false);
       document.getElementById('more-tools-sep').setAttribute('hidden', false);
     } else {
@@ -89,7 +89,7 @@
       document.getElementById('more-tools-sep').setAttribute('hidden', true);
     }
 
-    if (moreToolsMenuIsEmpty && !prefs.showWhenEmpty) {
+    if (isMoreToolsEmpty() && !prefs.showWhenEmpty) {
       document.getElementById('more-tools-menu').setAttribute('hidden', true);
     } else {
       document.getElementById('more-tools-menu').setAttribute('hidden', false);
@@ -101,7 +101,7 @@
 
     sortService = Components.classes['@mozilla.org/xul/xul-sort-service;1']
       .getService(Components.interfaces.nsIXULSortService);
-    if (prefs.sortItems) {
+    if (prefs.sortItems && !isMoreToolsEmpty()) {
       sortService.sort(moreToolsMenuPopup, 'label', 'ascending');
     } else {
       sortService.sort(moreToolsMenuPopup, 'defaultOrder', 'integer');
