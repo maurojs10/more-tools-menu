@@ -29,10 +29,6 @@
     return this.replace(/\|{2,}/g, '|').replace(/^\||\|$/g, '');
   };
 
-  function isMoreToolsEmpty() {
-    return (moreToolsMenuPopup.childNodes.length === 2);
-  }
-
   function updateItemsToKeep() {
     var pattern;
 
@@ -78,6 +74,30 @@
       XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
       null
     );
+  }
+
+  function isMoreToolsEmpty() {
+    //var menu, a, b, item, allItemsHidden;
+
+    if (moreToolsMenuPopup.childNodes.length === 2) {
+      return true;
+    }
+
+    //allItemsHidden = true;
+    //menu = getMenu(document, 'moreTools');
+    //for (a = 0, b = menu.snapshotLength - 1; a <= b; a += 1) {
+    //  item = menu.snapshotItem(a);
+    //  if (item) {
+    //    if (!(item.hasAttribute('hidden') && item.getAttribute('hidden'))) {
+    //      allItemsHidden = false;
+    //    }
+    //  }
+    //}
+    //if (allItemsHidden) {
+    //  return true;
+    //}
+
+    return false;
   }
 
   function toggleMoreTools() {
