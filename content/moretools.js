@@ -191,7 +191,7 @@
   }
 
   function dumpTools() {
-    var i, l, el, menu, message1, message2;
+    var i, l, menu, message1, message2;
 
     message1 = 'Items found in Tools menu at startup:\n';
     message2 = '\n\ntoolsToMove: ';
@@ -254,8 +254,6 @@
   }
 
   window.addEventListener('load', function () {
-    var i, l, el;
-
     // This line must be commented out to make the extension work properly.
     // return dumpTools();
 
