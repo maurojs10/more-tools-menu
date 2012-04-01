@@ -1,5 +1,6 @@
-content moretools             content/
-skin    moretools classic/1.0 skin/
+content  moretools             content/
+resource moretools             content/
+skin     moretools classic/1.0 skin/
 
 # Firefox main window
 overlay chrome://browser/content/browser.xul                               chrome://moretools/content/moretools-overlay.xul

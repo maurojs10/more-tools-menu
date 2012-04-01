@@ -1,3 +1,5 @@
+Components.utils.import("resource://moretools/itemsArrays.jsm");
+
 (function () {
   'use strict';
 
@@ -253,6 +255,29 @@
     prefBranch.QueryInterface(Components.interfaces.nsIPrefBranch);
   }
 
+  function updateItemsArrays() {
+    var i, l, menu, item, nativeToolsRegExp;
+
+    while (appItemsArray.length) {
+      appItemsArray.pop();
+    }
+
+    while (extItemsArray.length) {
+      extItemsArray.pop();
+    }
+
+    nativeToolsRegExp = new RegExp('^(' + nativeTools + ')$');
+    menu = getMenu(document, 'tools');
+    for (i = 0, l = menu.snapshotLength; i < l; i += 1) {
+      item = menu.snapshotItem(i);
+      if (nativeToolsRegExp.test(item.id)) {
+        appItemsArray.push(item);
+      } else {
+        extItemsArray.push(item);
+      }
+    }
+  }
+
   window.addEventListener('load', function () {
     // This line must be commented out to make the extension work properly.
     // return dumpTools();
@@ -269,6 +294,9 @@
 
     // Update the list of items to be kept in Tools menu.
     updateItemsToKeep();
+
+    // Update the arrays used by options window.
+    updateItemsArrays();
 
     // Move any tools not in the list of items to keep.
     moveTools();

@@ -8,7 +8,9 @@
   title="&moretools.optionsWindow.title;"
   xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 >
-  <prefpane>
+  <script type='application/x-javascript' src='options.js'></script>
+
+  <prefpane onpaneload="options.load();">
     <preferences>
       <preference
         id="prefShowWhenEmpty"
@@ -53,30 +55,28 @@
       />
     </hbox>
 
-    <hbox align="center">
-      <label
-        control="toolsToKeep"
-        value="&moretools.toolsToKeep.title;"
-        tooltiptext="&moretools.toolsToKeep.desc;"
-      />
-      <textbox
-        preference="prefToolsToKeep"
-        id="toolsToKeep"
-        tooltiptext="&moretools.toolsToKeep.desc;"
-      />
-    </hbox>
+    <label
+      control="toolsToKeep"
+      value="&moretools.toolsToKeep.title;"
+      tooltiptext="&moretools.toolsToKeep.desc;"
+    />
+    <richlistbox
+      id="toolsToKeep"
+      height="100"
+      tooltiptext="&moretools.toolsToKeep.desc;"
+    >
+    </richlistbox>
 
-    <hbox align="center">
-      <label
-        control="toolsToMove"
-        value="&moretools.toolsToMove.title;"
-        tooltiptext="&moretools.toolsToMove.desc;"
-      />
-      <textbox
-        preference="prefToolsToMove"
-        id="toolsToMove"
-        tooltiptext="&moretools.toolsToMove.desc;"
-      />
-    </hbox>
+    <label
+      control="toolsToMove"
+      value="&moretools.toolsToMove.title;"
+      tooltiptext="&moretools.toolsToMove.desc;"
+    />
+    <richlistbox
+      id="toolsToMove"
+      height="100"
+      tooltiptext="&moretools.toolsToMove.desc;"
+    >
+    </richlistbox>
   </prefpane>
 </prefwindow>
