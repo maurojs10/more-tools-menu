@@ -6,11 +6,7 @@
   id='moretools-overlay'
   xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul'
 >
-  <script
-    type='application/x-javascript'
-    src='chrome://moretools/content/moretools.js'
-  >
-  </script>
+  <script type='application/x-javascript' src='moretools.js'></script>
 
   <!-- Firefox, SeaMonkey -->
   <menubar id='main-menubar'>
