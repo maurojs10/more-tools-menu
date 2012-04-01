@@ -55,7 +55,7 @@
   }
 
   function getMenu(node, type) {
-    var  doc, xpath;
+    var doc, xpath;
 
     function nsResolver() {
       return 'http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul';
