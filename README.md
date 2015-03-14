@@ -1,5 +1,4 @@
 # More Tools Menu
-Rearrange Firefox extension's "tools" menu items into a "more tools" menu.
 
 It's rather common for Firefox extensions to want to let the user trigger an action. The way to do that is the menu bar. With the default menus in the menu bar, the tools menu is usually the only choice that makes any sense, so most all the extensions seem to stuff their commands inside the tools menu. Pretty quick, with the default and all the additional items, that menu is way too big to deal with.
 
